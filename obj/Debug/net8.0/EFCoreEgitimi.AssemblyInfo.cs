@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EFCoreEgitimi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a6e90501e2966d77132a1310eaef0c43f43c90a4")]
 [assembly: System.Reflection.AssemblyProductAttribute("EFCoreEgitimi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EFCoreEgitimi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
