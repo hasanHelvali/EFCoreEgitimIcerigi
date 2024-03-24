@@ -167,5 +167,59 @@ namespace EFCoreEgitimi.Controllers
 
         }
 
+        public async void VeriSilme()
+        {
+            #region Veri Nasıl Silinir
+            /*Silme isleminde de oncelikle veri db den cekilir. Elde edilen veri silinir. */
+            var value = await _context.Customers.FirstOrDefaultAsync(x => x.CustomerId == "3");//veri elde edildi.
+            _context.Remove(value);//Bu sekilde de veri silinir. Remove islmeinin asenkronu yoktur. 
+            await _context.SaveChangesAsync(); //Bu sekilde de ilgili islemler db ye aktarılır, execute edilir.
+            #endregion
+
+            #region Silme İsleminde ChangeTracker in Rolu
+            /*Context ten gelen tum veriler ChangeTracker ile takipp ediliyordu. Dolayısıyla buradaki veriler de context ten 
+             geliyorsa takip edilir.*/
+            #endregion
+
+            #region Takip edilmeyen nesneler nasıl silinir.
+            Customer customer = new() { CustomerId = "3" };//Bu sekilde farklı yollarla context ten gelmeyen bir verim var.
+            _context.Customers.Remove(customer);
+            /*Bu sekilde normal bir silme islemi yapıyoruz. Buradaki fonksiyon hangi nesneyi silecegini verilen nesnenin primary key inden yani 
+             id sinden anlar. */
+            await _context.SaveChangesAsync();//Tabii ki en son ine iligli yapıyı execute etmemiz gerekir.
+            #endregion
+
+            #region EntityState ile Silme İslemi
+            Customer customer1= new Customer() { CustomerId="1"};
+            _context.Entry(customer1).State = EntityState.Deleted;
+            /*Buradaki ilgili nesne takip edilemez durumda lakin biz bu nesnenin entitystate i ile oynayabiliyoruz. Bu nesnenin 
+             state ini EntityState enum ı ile deleted a cektigimizde db ye gonderilince silme islemine tabii tutulacagını gorebiliriz.*/
+            await _context.SaveChangesAsync();
+            //Bu sekilde execute islemini baslatıyorum.
+            #endregion
+
+            #region Birden fazla veriyi silerken dikkat edilmesi gerekenler
+            /*Diger durumlarla aynı olarak bir tane transaction ile silme islemlerini yapmaya dikkat etmek gerekir.*/
+            #endregion
+
+            #region RemoveRange Fonksiyonu
+
+            Employee customer2 = new Employee() { EmployeeId=2};
+            Employee customer3 = new Employee() { EmployeeId=3};
+            Employee customer4 = new Employee() { EmployeeId=4};
+            var result = _context.Employees.Where(x => x.EmployeeId>=2  && x.EmployeeId<= 4);
+            //Bu sarta uyan verileri IQueryable olarak getirir.
+
+            //var values =await result.ToListAsync();//İlgili veriler bir listeye alınarak geitirildi.
+            List<Employee>employees = await result.ToListAsync();//İlgili veriler bir listeye alınarak geitirildi.
+
+            //_context.RemoveRange(employees); //Bu sekilde calısırsak tip guvenli calısmayız.
+            _context.Employees.RemoveRange(employees);//Bu sekilde tip guvenli calısabiliriz.
+            //Bu sekilde bir koleksiyonda bulunan verileri toplu sekilde RemoveRnage ile silebiliriz.
+            await _context.SaveChangesAsync();//Execute ediyoruz.
+            #endregion
+
+
+        }
     }
 }
