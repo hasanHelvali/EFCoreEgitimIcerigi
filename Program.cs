@@ -27,3 +27,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+//PM > Scaffold - DbContext "Data Source=HASANHELVALI;Initial Catalog=NORTHWND; Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False" Microsoft.EntityFrameworkCore.SqlServer - OutputDir Entities - Context NorthwindDbContext
